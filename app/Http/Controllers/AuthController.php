@@ -6,11 +6,9 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\MeResource;
 use App\Models\User;
-use App\Support\Ability\AbilityResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthController extends Controller
 {
@@ -18,7 +16,7 @@ class AuthController extends Controller
      * Registration
      *
      * Create a new User
-     * @param  RegisterRequest  $request
+     * @param RegisterRequest $request
      * @return JsonResponse
      */
     public function register(RegisterRequest $request): JsonResponse
@@ -37,14 +35,10 @@ class AuthController extends Controller
         $token = $user->createToken('myapptoken')->plainTextToken;
         $user->remember_token = $token;
 
-//        $roleName = $request->get('job_role') ?? 'Admin of company '.$newCompany->id;
-
-//        $user->createRole($roleName);
 
         $response = [
             'token' => $token,
             'user' => $user,
-//            'roles' => $user->roles()->select(['id', 'name', 'guard_name'])->get(),
         ];
 
         return new JsonResponse(['payload' => $response], Response::HTTP_CREATED);
@@ -85,8 +79,6 @@ class AuthController extends Controller
                         $response,
                         [
                             'token' => $token,
-//                            'role' => $user->role,
-
                         ]
                     )
                 )
